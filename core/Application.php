@@ -14,8 +14,9 @@ class Application
         $this->router = new Router($this->request);
     }
 
+    // Echo is in one place only
     public function run()
     {
-        $this->router->resolve();
+        echo $this->router->resolve();
     }
 }

@@ -27,11 +27,10 @@ class Router
         // Callback checks method and path. If it dont exist pass false to dont print errors to users
         $callback = $this->routes[$method][$path] ?? false;
         if ($callback === false) {
-            echo 'Not found';
-            exit();
+            return 'Not found';
         }
 
-        echo call_user_func($callback);
+        return call_user_func($callback);
     }
 
 }
