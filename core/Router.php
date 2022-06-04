@@ -29,8 +29,17 @@ class Router
         if ($callback === false) {
             return 'Not found';
         }
+        // If callback is string (called in application), return a view
+        if (is_string($callback)) {
+            return $this->renderView($callback);
+        }
 
         return call_user_func($callback);
+    }
+
+    private function renderView(string $view)
+    {
+        include Application::$ROOT_DIR . "/views/$view.php";
     }
 
 }

@@ -1,16 +1,13 @@
 <?php
 
-require '../vendor/autoload.php';
+require_once '../vendor/autoload.php';
 
 use app\core\Application;
 
-$app = new Application();
+$app = new Application(dirname(__DIR__));
 
-$app->router->get('/', function() {
-    return 'hellow';
-});
-$app->router->get('/contact', function() {
-    return 'Contact';
-});
+// callback will be called in call_user_func
+$app->router->get('/', 'home');
+$app->router->get('/contact', 'contact');
 
 $app->run();
