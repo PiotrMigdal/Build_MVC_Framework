@@ -23,6 +23,11 @@ class Router
         $this->routes['get'][$path] = $callback;
     }
 
+    public function post($path, $callback)
+    {
+        $this->routes['post'][$path] = $callback;
+    }
+
     public function resolve()
     {
         $path = $this->request->getPath();
@@ -31,19 +36,28 @@ class Router
         $callback = $this->routes[$method][$path] ?? false;
         if ($callback === false) {
             $this->response->setStatusCode(404);
-            return 'Not found';
+            return $this->renderView('_404');
         }
         // If callback is string (called in application), return a view
         if (is_string($callback)) {
             return $this->renderView($callback);
         }
-
-        return call_user_func($callback);
+        if (is_array($callback)) {
+            // First iteration of array must be an object (not a string)
+            $callback[0] = new $callback[0]();
+        }
+        return call_user_func($callback, $this->request);
     }
 
-    private function renderView(string $view)
+    public function renderView(string $view, $params = [])
     {
+        foreach ($params as $key => $value) {
+            // key will be variable now $name
+            $$key = $value;
+        }
+        ob_start();
         include Application::$ROOT_DIR . "/views/$view.php";
+        return ob_get_clean();
     }
 
 }
