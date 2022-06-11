@@ -31,7 +31,7 @@ class Router
     public function resolve()
     {
         $path = $this->request->getPath();
-        $method = $this->request->getMethod();
+        $method = $this->request->method();
         // Callback checks method and path. If it dont exist pass false to dont print errors to users
         $callback = $this->routes[$method][$path] ?? false;
         if ($callback === false) {
